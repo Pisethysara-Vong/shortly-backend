@@ -178,23 +178,24 @@ export class AuthService {
                 audience: this.config.get('GOOGLE_CLIENT_ID'),
             });
             const payload = ticket.getPayload();
+
             if (!payload || !payload.email) {
                 throw new UnauthorizedException('Invalid Google token payload');
             }
+
             email = payload.email;
             googleId = payload.sub;
             name = payload.name;
             picture = payload.picture;
-        } catch {
-            const decoded = this.jwtService.decode(dto.idToken) as any;
-            if (decoded && decoded.email) {
-                email = decoded.email;
-                googleId = decoded.sub || 'google-user-id';
-                name = decoded.name;
-                picture = decoded.picture;
-            } else {
-                throw new UnauthorizedException('Invalid Google ID token');
+        } catch (err) {
+            // No fallback decoding. Any failure here — a bad signature, wrong
+            // audience, expired token, malformed token, or missing email — is
+            // rejected outright. We never trust claims from a token that failed
+            // verification.
+            if (err instanceof UnauthorizedException) {
+                throw err;
             }
+            throw new UnauthorizedException('Invalid Google ID token');
         }
 
         let user = await prismaClient.user.findUnique({
