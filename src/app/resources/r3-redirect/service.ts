@@ -17,6 +17,10 @@ export class RedirectService {
     { originalUrl: string; expiresAt: Date | null }
   >();
 
+  resetCache(): void {
+    this.cache.clear();
+  }
+
   async resolveAndIncrement(shortCode: string): Promise<string> {
     let cached = this.cache.get(shortCode);
     let originalUrl: string;
