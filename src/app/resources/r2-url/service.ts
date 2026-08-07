@@ -5,6 +5,7 @@
 
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -107,6 +108,17 @@ export class UrlService {
       } else {
         shortCode = this.generateShortCode();
       }
+    }
+
+    if (!isUnique) {
+      // All 10 attempts collided. Rather than silently proceeding to
+      // create() with a code that may still not be unique (which would
+      // surface as a raw, unhandled Prisma unique-constraint violation —
+      // effectively a generic 500 with no actionable message), fail
+      // loudly and cleanly here instead.
+      throw new ConflictException(
+        'Could not generate a unique short code. Please try again.',
+      );
     }
 
     const newUrl = await prismaClient.url.create({
