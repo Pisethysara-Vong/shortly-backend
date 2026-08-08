@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { RouterModule } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
@@ -7,6 +8,7 @@ import { UrlModule } from './resources/r2-url/module';
 import { RedirectModule } from './resources/r3-redirect/module';
 import { JwtMiddleware } from './middlewares/jwt.middleware';
 import { CacheCronService } from './utils/cache-cron.service';
+import { appRoutes } from './app.route';
 
 @Module({
   controllers: [AppController],
@@ -19,6 +21,7 @@ import { CacheCronService } from './utils/cache-cron.service';
     AccountModule,
     UrlModule,
     RedirectModule,
+    RouterModule.register(appRoutes),
   ],
   providers: [
     CacheCronService
@@ -30,7 +33,7 @@ export class AppModule implements NestModule {
       .apply(JwtMiddleware)
       .exclude(
         { path: '', method: RequestMethod.GET },
-        { path: 'api/account/(.*)', method: RequestMethod.GET },
+        { path: 'api/account/(.*)', method: RequestMethod.ALL },
         { path: 'api/redirect/(.*)', method: RequestMethod.GET },
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL });

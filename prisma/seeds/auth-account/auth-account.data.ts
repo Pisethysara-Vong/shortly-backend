@@ -8,7 +8,7 @@ export const data = {
       userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
       provider: AuthEnum.LOCAL,
       providerUserId: null,
-      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$seedhashadmin000000000000$abcdefghijklmnopqrstuvwxyz012345',
+      passwordHash: '$2a$12$YTJr.JtoaRaaE7oO3ezTneWmFIuhdCn5mdCo.w2uYO4eKD1Ud/eDy', // adminPassword
       createdAt: new Date('2026-01-01T00:00:00.000Z'),
       disabledAt: null,
     },
@@ -18,7 +18,7 @@ export const data = {
       userId: 'b2c3d4e5-f6a7-8901-bcde-f12345678901',
       provider: AuthEnum.LOCAL,
       providerUserId: null,
-      passwordHash: '$argon2id$v=19$m=65536,t=3,p=4$seedhashjohn0000000000000$abcdefghijklmnopqrstuvwxyz012345',
+      passwordHash: '$2a$12$mSFxQ9AnDXE7mkQOXTveq.mP8.yqHvWzwDOYysK5EFhA2yVg4HIEG', // johnDoePassword
       createdAt: new Date('2026-02-15T10:30:00.000Z'),
       disabledAt: null,
     },
